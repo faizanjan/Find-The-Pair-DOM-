@@ -51,7 +51,6 @@ main.addEventListener("click", (event) => {
 startBtn.addEventListener("click", () => {
   if (gameStarted) location.reload();
 
-  gameStarted = true;
   main.innerHTML = `
         <div class="card" id="1" > <span class="card-value" >1</span></div>
         <div class="card" id="3" > <span class="card-value" >3</span></div>
@@ -85,6 +84,7 @@ startBtn.addEventListener("click", () => {
     intervalInstance = setInterval(() => {
       time.innerText = ++seconds;
     }, 1000);
+    gameStarted = true;
   }, 2000);
 
   startBtn.innerText = "RELOAD";
