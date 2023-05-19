@@ -17,10 +17,10 @@ main.addEventListener("click", (event) => {
     let element = event.target;
     moves++;
     movesCount.innerText = moves;
-    element.style.animation = "flipBack 0.5s linear";
+    element.style.animation = "flipBack 0.3s linear";
     setTimeout(() => {
       element.classList.add("active-card");
-    }, 400);
+    }, 200);
     if (firstCard === null) {
       firstCard = element;
     } else {
@@ -40,11 +40,11 @@ main.addEventListener("click", (event) => {
       } else {
         setTimeout(() => {
           firstCard.classList.remove("active-card");
-          firstCard.style.animation = "flip 0.5s linear";
+          firstCard.style.animation = "flip 0.3s linear";
           element.classList.remove("active-card");
-          element.style.animation = "flip 0.5s linear";
+          element.style.animation = "flip 0.3s linear";
           firstCard = null;
-        }, 800);
+        }, 500);
       }
     }
   }
@@ -81,7 +81,7 @@ startBtn.addEventListener("click", () => {
   setTimeout(() => {
     cards.forEach((card) => {
       card.classList.remove("active-card");
-      card.style.animation = "flip 0.5s linear";
+      card.style.animation = "flip 0.3s linear";
     });
     intervalInstance = setInterval(() => {
       time.innerText = ++seconds;
