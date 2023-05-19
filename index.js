@@ -13,7 +13,10 @@ let intervalInstance;
 main.addEventListener("click", (event) => {
   if (!gameStarted) return;
 
-  if (event.target.classList.contains("card") && !event.target.classList.contains("active-card")) {
+  if (
+    event.target.classList.contains("card") &&
+    !event.target.classList.contains("active-card")
+  ) {
     let element = event.target;
     moves++;
     movesCount.innerText = moves;
@@ -24,11 +27,12 @@ main.addEventListener("click", (event) => {
     if (firstCard === null) {
       firstCard = element;
     } else {
-      if (firstCard.getAttribute("id") === element.getAttribute("id") &&
+      if (
+        firstCard.getAttribute("id") === element.getAttribute("id") &&
         firstCard !== element
       ) {
-        firstCard.style.background="green";
-        element.style.background="green";
+        firstCard.style.background = "green";
+        element.style.background = "green";
         //   GAME END:
         if (--remainingPairs === 0) {
           clearInterval(intervalInstance);
@@ -54,24 +58,25 @@ startBtn.addEventListener("click", () => {
   if (gameStarted) location.reload();
 
   main.innerHTML = `
-        <div class="card" id="1" > <span class="card-value" >1</span></div>
-        <div class="card" id="3" > <span class="card-value" >3</span></div>
-        <div class="card" id="7" > <span class="card-value" >7</span></div>
-        <div class="card" id="2" > <span class="card-value" >2</span></div>
-        <div class="card" id="3" > <span class="card-value" >3</span></div>
-        <div class="card" id="5" > <span class="card-value" >5</span></div>
-        <div class="card" id="7" > <span class="card-value" >7</span></div>
-        <div class="card" id="4" > <span class="card-value" >4</span></div>
-        <div class="card" id="1" > <span class="card-value" >1</span></div>
-        <div class="card" id="6" > <span class="card-value" >6</span></div>
-        <div class="card" id="8" > <span class="card-value" >8</span></div>
-        <div class="card" id="5" > <span class="card-value" >5</span></div>
-        <div class="card" id="8" > <span class="card-value" >8</span></div>
-        <div class="card" id="4" > <span class="card-value" >4</span></div>
-        <div class="card" id="6" > <span class="card-value" >6</span></div>
-        <div class="card" id="2" > <span class="card-value" >2</span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
+        <div class="card" > <span class="card-value" ></span></div>
         `;
 
+  assignValues();
   let cards = document.querySelectorAll(".card");
 
   cards.forEach((card) => {
@@ -91,3 +96,36 @@ startBtn.addEventListener("click", () => {
 
   startBtn.innerText = "RELOAD";
 });
+
+function assignValues() {
+  const usedInt = [];
+  const assignedCards = [];
+  let cards = document.querySelectorAll(".card");
+  let cardsValues = document.querySelectorAll(".card-value");
+
+  let i = 0;
+  while (usedInt.length < 8) {
+    let randomInt = null;
+    while (randomInt === null || usedInt.includes(randomInt)) {
+      randomInt = Math.floor(Math.random() * 9);
+    }
+    usedInt.push(randomInt);
+
+    let randElement1 = null;
+    while (randElement1 === null || assignedCards.includes(randElement1)) {
+      randElement1 = Math.floor(Math.random() * 16);
+    }
+    assignedCards.push(randElement1);
+
+    let randElement2 = null;
+    while (randElement2 === null || assignedCards.includes(randElement2)) {
+      randElement2 = Math.floor(Math.random() * 16);
+    }
+    assignedCards.push(randElement2);
+
+    cards[randElement1].setAttribute("id", randomInt);
+    cards[randElement2].setAttribute("id", randomInt);
+    cardsValues[randElement1].innerText = randomInt;
+    cardsValues[randElement2].innerText = randomInt;
+  }
+}
