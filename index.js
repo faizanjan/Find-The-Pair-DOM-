@@ -13,7 +13,7 @@ let intervalInstance;
 main.addEventListener("click", (event) => {
   if (!gameStarted) return;
 
-  if (event.target.classList.contains("card")) {
+  if (event.target.classList.contains("card") && !event.target.classList.contains("active-card")) {
     let element = event.target;
     moves++;
     movesCount.innerText = moves;
@@ -24,7 +24,9 @@ main.addEventListener("click", (event) => {
     if (firstCard === null) {
       firstCard = element;
     } else {
-      if (firstCard.getAttribute("id") === element.getAttribute("id")) {
+      if (firstCard.getAttribute("id") === element.getAttribute("id") &&
+        firstCard !== element
+      ) {
         firstCard.style.background="green";
         element.style.background="green";
         //   GAME END:
