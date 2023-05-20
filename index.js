@@ -4,93 +4,46 @@ let startBtn = document.getElementById("start");
 let time = document.getElementById("time");
 
 let firstCard = null;
-let remainingPairs = 8;
+let remainingPairs=8;
 let moves = 0;
 let seconds = 0;
 let gameStarted = false;
 let intervalInstance;
 
-main.addEventListener("click", (event) => {
-  if (!gameStarted) return;
-
-  if (
-    event.target.classList.contains("card") &&
-    !event.target.classList.contains("active-card")
-  ) {
-    let element = event.target;
-    moves++;
-    movesCount.innerText = moves;
-    element.style.animation = "flipBack 0.3s linear";
-    setTimeout(() => {
-      element.classList.add("active-card");
-    }, 200);
-    if (firstCard === null) {
-      firstCard = element;
-    } else {
-      if (
-        firstCard.getAttribute("id") === element.getAttribute("id") &&
-        firstCard !== element
-      ) {
-        firstCard.style.background = "green";
-        element.style.background = "green";
-        //   GAME END:
-        if (--remainingPairs === 0) {
-          clearInterval(intervalInstance);
-          main.innerHTML = `
-            <h1 id="game-won">GAME WON in ${seconds} seconds</h1>;
-        `;
-        }
-        firstCard = null;
-      } else {
-        setTimeout(() => {
-          firstCard.classList.remove("active-card");
-          firstCard.style.animation = "flip 0.3s linear";
-          element.classList.remove("active-card");
-          element.style.animation = "flip 0.3s linear";
-          firstCard = null;
-        }, 500);
-      }
-    }
-  }
-});
-
-startBtn.addEventListener("click", () => {
+let startGame = () => {
   if (gameStarted) location.reload();
 
-  let i = 16
-
-  main.innerHTML='';
-  while(i-->0){
-    let myCard = document.createElement('div');
-    myCard.classList.add('card');
-    let value = document.createElement('span');
-    value.classList.add('card-value');
-    myCard.appendChild(value);
-    main.appendChild(myCard)
-  }
-
+  addCardsToMain();
   assignValues();
+
   let cards = document.querySelectorAll(".card");
 
-  cards.forEach((card) => {
-    card.classList.add("active-card");
-  });
+  showAllCards(cards);
 
   setTimeout(() => {
-    cards.forEach((card) => {
-      card.classList.remove("active-card");
-      card.style.animation = "flip 0.3s linear";
-    });
-    intervalInstance = setInterval(() => {
-      time.innerText = ++seconds;
-    }, 1000);
+    //hide cards after 2 seconds
+    hideAllCards(cards);
+    startTimer();
     gameStarted = true;
   }, 2000);
 
   startBtn.innerText = "RELOAD";
-});
+};
 
-function assignValues() {
+let addCardsToMain = () => {
+  main.innerHTML = "";
+  let i = 16;
+  while (i-- > 0) {
+    let myCard = document.createElement("div");
+    myCard.classList.add("card");
+    let value = document.createElement("span");
+    value.classList.add("card-value");
+    myCard.appendChild(value);
+    main.appendChild(myCard);
+  }
+};
+
+let assignValues = () => {
   const usedInt = [];
   const assignedCards = [];
   let cards = document.querySelectorAll(".card");
@@ -100,7 +53,7 @@ function assignValues() {
   while (usedInt.length < 8) {
     let randomInt = null;
     while (randomInt === null || usedInt.includes(randomInt)) {
-      randomInt = Math.floor(Math.random() * 9);
+      randomInt = Math.floor(Math.random() * 8)+1;
     }
     usedInt.push(randomInt);
 
@@ -121,4 +74,78 @@ function assignValues() {
     cardsValues[randElement1].innerText = randomInt;
     cardsValues[randElement2].innerText = randomInt;
   }
-}
+};
+
+let showAllCards = (cards) => {
+  cards.forEach((card) => {
+    card.classList.add("active-card");
+  });
+};
+
+let hideAllCards = (cards) => {
+  cards.forEach((card) => {
+    card.classList.remove("active-card");
+    card.style.animation = "flip 0.3s linear";
+  });
+};
+
+let startTimer = () => {
+  intervalInstance = setInterval(() => {
+    time.innerText = ++seconds;
+  }, 1000);
+};
+
+let handleCardClick = (event) => {
+  // Checks
+  if (
+    !event.target.classList.contains("card") ||
+    event.target.classList.contains("active-card") ||
+    !gameStarted
+  )
+    return;
+
+  movesCount.innerText = ++moves;
+
+  let element = event.target;
+  showCard(element);
+
+  if (firstCard === null) firstCard = element;
+  else {
+    if (
+      firstCard.getAttribute("id") === element.getAttribute("id") &&
+      firstCard !== element // prevent pairing a card with itself
+    ) {
+      firstCard.style.background = "green";
+      element.style.background = "green";
+      if (--remainingPairs === 0) endGame();
+      firstCard = null;
+    } else {
+      setTimeout(() => {
+        hideCard(firstCard);
+        hideCard(element);
+        firstCard = null;
+      }, 500);
+    }
+  }
+};
+
+let endGame = () => {
+  clearInterval(intervalInstance);
+  main.innerHTML = `<h1 id="game-won">GAME WON in ${seconds} seconds</h1>;`;
+};
+
+let showCard = (card) => {
+  card.style.animation = "flipBack 0.3s linear";
+  setTimeout(() => {
+    card.classList.add("active-card");
+  }, 200);
+};
+
+let hideCard = (card) => {
+  card.classList.remove("active-card");
+  card.style.animation = "flip 0.3s linear";
+};
+
+main.addEventListener("click", handleCardClick);
+
+startBtn.addEventListener("click", startGame);
