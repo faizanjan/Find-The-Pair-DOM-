@@ -57,24 +57,17 @@ main.addEventListener("click", (event) => {
 startBtn.addEventListener("click", () => {
   if (gameStarted) location.reload();
 
-  main.innerHTML = `
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        <div class="card" > <span class="card-value" ></span></div>
-        `;
+  let i = 16
+
+  main.innerHTML='';
+  while(i-->0){
+    let myCard = document.createElement('div');
+    myCard.classList.add('card');
+    let value = document.createElement('span');
+    value.classList.add('card-value');
+    myCard.appendChild(value);
+    main.appendChild(myCard)
+  }
 
   assignValues();
   let cards = document.querySelectorAll(".card");
